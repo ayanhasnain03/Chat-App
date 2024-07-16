@@ -13,14 +13,17 @@ import { CameraAlt as CameraAltIcon } from "@mui/icons-material";
 import { VisuallyHiddenInput } from "../components/styles/StyledComponent";
 import { useFileHandler, useInputValidation, useStrongPassword } from "6pp";
 import { usernameValidator } from "../utils/validators";
+
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const toggleLogin = () => setIsLogin((prev) => !prev);
+
   const name = useInputValidation("");
   const bio = useInputValidation("");
   const username = useInputValidation("", usernameValidator);
   const password = useStrongPassword();
   const avatar = useFileHandler("single");
+
   const handleLogin = (e) => {
     e.preventDefault();
     console.log(username.value, password.value);
@@ -30,6 +33,7 @@ const Login = () => {
     e.preventDefault();
     console.log(username.value, password.value);
   };
+
   return (
     <Container
       component="main"
@@ -47,6 +51,8 @@ const Login = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          boxShadow: "0 3px 10px rgba(0,0,0,0.2)",
+          borderRadius: "8px",
         }}
         elevation={3}
       >
