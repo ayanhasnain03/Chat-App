@@ -11,11 +11,25 @@ import { Container } from "@mui/material";
 import { useState } from "react";
 import { CameraAlt as CameraAltIcon } from "@mui/icons-material";
 import { VisuallyHiddenInput } from "../components/styles/StyledComponent";
-
+import { useFileHandler, useInputValidation, useStrongPassword } from "6pp";
+import { usernameValidator } from "../utils/validators";
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const toggleLogin = () => setIsLogin(!isLogin);
+  const toggleLogin = () => setIsLogin((prev) => !prev);
+  const name = useInputValidation("");
+  const bio = useInputValidation("");
+  const username = useInputValidation("", usernameValidator);
+  const password = useStrongPassword();
+  const avatar = useFileHandler("single");
+  const handleLogin = (e) => {
+    e.preventDefault();
+    console.log(username.value, password.value);
+  };
 
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    console.log(username.value, password.value);
+  };
   return (
     <Container
       component="main"
@@ -41,7 +55,7 @@ const Login = () => {
             <Typography variant="h5" sx={{ marginBottom: 2 }}>
               Login
             </Typography>
-            <form style={{ width: "100%" }}>
+            <form style={{ width: "100%" }} onSubmit={handleLogin}>
               <TextField
                 required
                 fullWidth
@@ -49,6 +63,8 @@ const Login = () => {
                 variant="outlined"
                 label="Username"
                 sx={{ marginBottom: 2 }}
+                value={username.value}
+                onChange={username.changeHandler}
               />
               <TextField
                 required
@@ -58,6 +74,8 @@ const Login = () => {
                 variant="outlined"
                 label="Password"
                 sx={{ marginBottom: 2 }}
+                value={password.value}
+                onChange={password.changeHandler}
               />
               <Button
                 sx={{ marginTop: 2, marginBottom: 2 }}
@@ -86,7 +104,7 @@ const Login = () => {
             <Typography variant="h5" sx={{ marginBottom: 2 }}>
               Sign Up
             </Typography>
-            <form style={{ width: "100%" }}>
+            <form style={{ width: "100%" }} onSubmit={handleSignUp}>
               <Stack
                 position="relative"
                 width="10rem"
@@ -95,7 +113,13 @@ const Login = () => {
               >
                 <Avatar
                   sx={{ width: "10rem", height: "10rem", objectFit: "contain" }}
+                  src={avatar.preview}
                 />
+                {avatar.error && (
+                  <Typography color="error" textAlign="center">
+                    {avatar.error}
+                  </Typography>
+                )}
                 <IconButton
                   sx={{
                     position: "absolute",
@@ -111,7 +135,10 @@ const Login = () => {
                 >
                   <>
                     <CameraAltIcon />
-                    <VisuallyHiddenInput type="file" />
+                    <VisuallyHiddenInput
+                      type="file"
+                      onChange={avatar.changeHandler}
+                    />
                   </>
                 </IconButton>
               </Stack>
@@ -121,6 +148,8 @@ const Login = () => {
                 margin="normal"
                 variant="outlined"
                 label="Name"
+                value={name.value}
+                onChange={name.changeHandler}
                 sx={{ marginBottom: 2 }}
               />
               <TextField
@@ -130,6 +159,8 @@ const Login = () => {
                 variant="outlined"
                 label="Bio"
                 sx={{ marginBottom: 2 }}
+                value={bio.value}
+                onChange={bio.changeHandler}
               />
               <TextField
                 required
@@ -138,7 +169,14 @@ const Login = () => {
                 variant="outlined"
                 label="Username"
                 sx={{ marginBottom: 2 }}
+                value={username.value}
+                onChange={username.changeHandler}
               />
+              {username.error && (
+                <Typography color="error" variant="caption">
+                  {username.error}
+                </Typography>
+              )}
               <TextField
                 required
                 fullWidth
@@ -147,7 +185,14 @@ const Login = () => {
                 variant="outlined"
                 label="Password"
                 sx={{ marginBottom: 2 }}
+                value={password.value}
+                onChange={password.changeHandler}
               />
+              {password.error && (
+                <Typography color="error" variant="caption">
+                  {password.error}
+                </Typography>
+              )}
               <Button
                 sx={{ marginTop: 2, marginBottom: 2 }}
                 type="submit"
