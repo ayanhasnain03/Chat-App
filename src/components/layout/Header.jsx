@@ -15,9 +15,11 @@ import {
   Group as GroupIcon,
   Logout as LogoutIcon,
   Notifications as NotificationsIcon,
+  Image,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { lazy, Suspense, useState } from "react";
+import Logo from "../../assests/chat.png";
 const SearchDialoge = lazy(() => import("../specific/SearchDialoge"));
 const Newgroup = lazy(() => import("../specific/Newgroup"));
 const Notifications = lazy(() => import("../specific/Notifications"));
@@ -49,13 +51,10 @@ const Header = () => {
       <Box sx={{ flexGrow: 1, height: "4rem" }}>
         <AppBar position="static" sx={{ bgcolor: cyan }}>
           <Toolbar>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-            >
-              Chat App
-            </Typography>
+            <Box sx={{ display: { xs: "none", sm: "block" } }}>
+              <img src={Logo} alt="logo" style={{ height: "3rem" }} />
+            </Box>
+
             <Box sx={{ display: { xs: "block", sm: "none" } }}>
               <IconButton color="inherit" onClick={toggleHanler}>
                 <MenuIcon />
