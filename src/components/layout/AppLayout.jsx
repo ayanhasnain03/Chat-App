@@ -53,9 +53,9 @@ const AppLayout = () => (WrappedComponent) => {
             md={4}
             lg={3}
             height={"100%"}
-            bgcolor={"red"}
             sx={{
               display: { xs: "none", md: "block" },
+              height: "100vh",
               padding: "2rem",
               bgcolor: "#000000",
             }}

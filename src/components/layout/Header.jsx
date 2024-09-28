@@ -7,7 +7,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { cyan } from "../../constants/color"; // Corrected import
+import { cyan } from "../../constants/color";
 import {
   Menu as MenuIcon,
   SearchRounded as SearchIcon,
@@ -20,7 +20,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { lazy, Suspense, useState } from "react";
 import Logo from "../../assests/chat.png";
-const SearchDialoge = lazy(() => import("../specific/SearchDialoge"));
+
+const Search = lazy(() => import("../specific/Search"));
 const Newgroup = lazy(() => import("../specific/Newgroup"));
 const Notifications = lazy(() => import("../specific/Notifications"));
 
@@ -32,19 +33,24 @@ const Header = () => {
 
   const navigate = useNavigate();
   const toggleHanler = () => {
-    setToggle((prev = !prev));
+    setToggle((prev) => !prev);
   };
 
   const openSearchDialog = () => {
-    setIsSearch((prev = !prev));
+    setIsSearch((prev) => !prev);
   };
 
   const openNewGroup = () => {
-    setIsGroup((prev = !prev));
+    setIsGroup((prev) => !prev);
   };
+  const openNotification = () => {
+    setIsNotifiction((prev) => !prev);
+  };
+
   const logOutHandler = () => {
     console.log("log out");
   };
+
   const naviagteToGroup = () => navigate("/groups");
   return (
     <>
@@ -80,7 +86,7 @@ const Header = () => {
               <IconBtn
                 title="Notification"
                 icon={<NotificationsIcon />}
-                onClick={() => navigate("/notification")}
+                onClick={openNotification}
               />
               <IconBtn
                 title="Log Out"
@@ -93,7 +99,7 @@ const Header = () => {
       </Box>
       {isSearch && (
         <Suspense fallback={<Backdrop open />}>
-          <SearchDialoge />
+          <Search />
         </Suspense>
       )}
       {isGroup && (
