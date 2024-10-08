@@ -1,25 +1,23 @@
 import {
+  Add as AddIcon,
+  Group as GroupIcon,
+  Logout as LogoutIcon,
+  Menu as MenuIcon,
+  Notifications as NotificationsIcon,
+  SearchRounded as SearchIcon,
+} from "@mui/icons-material";
+import {
   AppBar,
   Backdrop,
   Box,
   IconButton,
   Toolbar,
   Tooltip,
-  Typography,
 } from "@mui/material";
-import { cyan } from "../../constants/color";
-import {
-  Menu as MenuIcon,
-  SearchRounded as SearchIcon,
-  Add as AddIcon,
-  Group as GroupIcon,
-  Logout as LogoutIcon,
-  Notifications as NotificationsIcon,
-  Image,
-} from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 import { lazy, Suspense, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Logo from "../../assests/chat.png";
+import { cyan } from "../../constants/color";
 
 const Search = lazy(() => import("../specific/Search"));
 const Newgroup = lazy(() => import("../specific/Newgroup"));

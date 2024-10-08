@@ -3,7 +3,6 @@ import {
   Button,
   Dialog,
   DialogTitle,
-  Skeleton,
   Stack,
   TextField,
   Typography,
@@ -14,8 +13,17 @@ import UserItem from "../shared/UserItem";
 
 const NewGroup = () => {
   const groupName = useInputValidation("");
-  const selectMember = () => {};
+  const [members, setMembers] = useState(sampleUsers);
+  const [selectMembers, setSelectMembers] = useState([]);
+  const selectMemberHandler = (id) => {
+    setSelectMembers((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+  console.log(selectMembers);
+
   const onSubmitHandler = () => {};
+  const closeHandler = () => {};
   return (
     <Dialog open>
       <Stack p={{ xs: "1rem", sm: "3rem" }} width={"25rem"} spacing={"2rem"}>
@@ -32,8 +40,13 @@ const NewGroup = () => {
         <Typography variant="body1">Members</Typography>
 
         <Stack>
-          {sampleUsers.map((i) => (
-            <UserItem user={i} key={i._id} handler={selectMember} />
+          {members.map((i) => (
+            <UserItem
+              user={i}
+              key={i._id}
+              handler={selectMemberHandler}
+              isAdded={selectMembers.includes(i._id)}
+            />
           ))}
         </Stack>
 
