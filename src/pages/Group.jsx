@@ -1,36 +1,66 @@
-import { KeyboardBackspace } from "@mui/icons-material";
-import { Grid, IconButton, Tooltip } from "@mui/material";
+import { KeyboardBackspace, Menu as MenuIcon } from "@mui/icons-material";
+import { Box, Drawer, Grid, IconButton, Tooltip } from "@mui/material";
+import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Group = () => {
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const navigate = useNavigate();
 
+  // Memoize handleMobile using useCallback
+  const handleMobile = useCallback(() => {
+    setIsMobileOpen((prev) => !prev);
+  }, []);
+
+  const handleMobileClose = useCallback(() => {
+    setIsMobileOpen(false);
+  }, []);
+
+  // IconButtons component no longer memoized as it's unnecessary
   const IconButtons = () => {
     return (
-      <Tooltip title="back">
-        <IconButton
+      <>
+        {/* Menu icon for mobile */}
+        <Box
           sx={{
-            position: "absolute",
-            top: "2rem",
-            left: "2rem",
-            bgcolor: "rgba(0,0,0,0.8)",
-            color: "white",
-            transition: "all 0.3s ease-in-out",
-            ":hover": {
-              bgcolor: "black",
-              transform: "scale(1.2)",
-            },
+            display: { xs: "block", sm: "none" },
+            position: "fixed",
+            right: "1rem",
+            top: "1rem",
           }}
-          onClick={() => navigate("/")}
         >
-          <KeyboardBackspace />
-        </IconButton>
-      </Tooltip>
+          <IconButton onClick={handleMobile}>
+            <MenuIcon />
+          </IconButton>
+        </Box>
+
+        {/* Back button */}
+        <Tooltip title="back">
+          <IconButton
+            sx={{
+              position: "absolute",
+              top: "2rem",
+              left: "2rem",
+              bgcolor: "rgba(0,0,0,0.8)",
+              color: "white",
+              transition: "all 0.3s ease-in-out",
+              ":hover": {
+                bgcolor: "black",
+                transform: "scale(1.2)",
+              },
+            }}
+            onClick={() => navigate("/")}
+          >
+            <KeyboardBackspace />
+          </IconButton>
+        </Tooltip>
+      </>
     );
   };
 
   return (
     <Grid container height={"100vh"}>
+      {/* Group list sidebar (visible on small screens and larger) */}
       <Grid
         item
         sm={4}
@@ -45,6 +75,7 @@ const Group = () => {
         Group List
       </Grid>
 
+      {/* Main content area */}
       <Grid
         item
         xs={12}
@@ -60,8 +91,13 @@ const Group = () => {
       >
         <IconButtons />
       </Grid>
+
+      {/* Drawer for mobile menu */}
+      <Drawer open={isMobileOpen} onClose={handleMobileClose}>
+        <GroupList />
+      </Drawer>
     </Grid>
   );
 };
-
+const GroupList = () => {};
 export default Group;
