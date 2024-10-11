@@ -20,4 +20,15 @@ const Link = styled(LinkComponent)`
   }
 `;
 
-export { VisuallyHiddenInput, Link };
+const InputBox = styled("input")`
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  &:focus {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+`;
+export { InputBox, Link, VisuallyHiddenInput };
