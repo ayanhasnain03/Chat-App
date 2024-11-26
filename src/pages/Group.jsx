@@ -23,6 +23,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import AvatarCard from "../components/shared/AvatarCard";
 import { Link } from "../components/styles/StyledComponent";
 import { chats } from "../constants/sampleData";
+import AddMemberDialog from "../components/dialogs/AddMemberDialog";
 
 const ConfirmDeleteDialog = lazy(() =>
   import("../components/dialogs/ConfirmDeleteDialog")
@@ -37,6 +38,7 @@ const Groups = () => {
   const [groupNameUpdatedValue, setGroupNameUpdatedValue] = useState("");
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
+  const [isAddMemberOpen, setIsAddMemberOpen] = useState(false); // State for AddMemberDialog
   const navigate = useNavigate();
 
   // Toggle mobile drawer
@@ -57,7 +59,11 @@ const Groups = () => {
   };
 
   const openAddMemberHandler = () => {
-    console.log("Add member handler");
+    setIsAddMemberOpen(true);
+  };
+
+  const closeAddMemberHandler = () => {
+    setIsAddMemberOpen(false);
   };
 
   useEffect(() => {
@@ -184,7 +190,10 @@ const Groups = () => {
               spacing="2rem"
               height="50vh"
               overflow="auto"
-            ></Stack>
+            >
+              {/* Add member list logic or an empty state */}
+              <Typography>No members added yet.</Typography>
+            </Stack>
 
             <Stack
               direction={{ xs: "column-reverse", sm: "row" }}
@@ -211,6 +220,12 @@ const Groups = () => {
           </>
         )}
       </Grid>
+
+      {isAddMemberOpen && (
+        <Suspense fallback={<Backdrop open />}>
+          <AddMemberDialog />
+        </Suspense>
+      )}
 
       {isConfirmDeleteOpen && (
         <Suspense fallback={<Backdrop open />}>
