@@ -22,8 +22,9 @@ import React, { lazy, memo, Suspense, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import AvatarCard from "../components/shared/AvatarCard";
 import { Link } from "../components/styles/StyledComponent";
-import { chats } from "../constants/sampleData";
+import { chats, sampleUsers } from "../constants/sampleData";
 import AddMemberDialog from "../components/dialogs/AddMemberDialog";
+import UserItem from "../components/shared/UserItem";
 
 const ConfirmDeleteDialog = lazy(() =>
   import("../components/dialogs/ConfirmDeleteDialog")
@@ -66,7 +67,12 @@ const Groups = () => {
     setIsAddMemberOpen(false);
   };
 
+  const removeMemberHandler = (id) => {
+console.log(`Remove member with ID: ${id}`);
+  };
+
   useEffect(() => {
+  if(chatId) {
     setIsEdit(false);
     setGroupName(`Group Name ${chatId}`);
     setGroupNameUpdatedValue(`Group Name ${chatId}`);
@@ -75,6 +81,7 @@ const Groups = () => {
       setGroupNameUpdatedValue("");
       setIsEdit(false);
     };
+  }
   }, [chatId]);
 
   const deleteHandler = () => {
@@ -130,6 +137,14 @@ const Groups = () => {
           display: { xs: "none", sm: "block" },
           borderRight: "1px solid #ccc",
           bgcolor: "#f1f1f1",
+          overflow: "auto",
+          position: "relative",
+          padding: "1rem",
+          height: "100%",
+          boxSizing: "border-box",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          zIndex: 1,
+          
         }}
         height="100%"
       >
@@ -191,8 +206,17 @@ const Groups = () => {
               height="50vh"
               overflow="auto"
             >
-              {/* Add member list logic or an empty state */}
-              <Typography>No members added yet.</Typography>
+              
+              {
+                sampleUsers.map((i) => <UserItem key={i._id}  user={i} isAdded styling={{
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                  padding: "1rem",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease-in-out",
+                  
+                }} handler={removeMemberHandler} />)
+              }
             </Stack>
 
             <Stack
@@ -239,7 +263,7 @@ const Groups = () => {
 
       {/* Drawer for mobile screens */}
       <Drawer open={isMobileOpen} onClose={handleMobileClose}>
-        <GroupsList w="50vw" />
+        <GroupsList w="60vw"  myGroups={chats} />
       </Drawer>
     </Grid>
   );
@@ -247,7 +271,7 @@ const Groups = () => {
 
 // GroupsList component rendering group items or fallback when empty
 const GroupsList = ({ w = "100%", myGroups = [] }) => (
-  <Stack sx={{ width: w, padding: "1rem" }}>
+  <Stack sx={{ width: w, padding: "0.5rem" }}>
     {myGroups.length > 0 ? (
       myGroups.map((group) => <GroupListItem key={group._id} group={group} />)
     ) : (
