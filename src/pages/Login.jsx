@@ -13,8 +13,14 @@ import { CameraAlt as CameraAltIcon } from "@mui/icons-material";
 import { VisuallyHiddenInput } from "../components/styles/StyledComponent";
 import { useFileHandler, useInputValidation, useStrongPassword } from "6pp";
 import { usernameValidator } from "../utils/validators";
-
+import axios from "axios";
+import { server } from "../constants/config";
+import { useDispatch } from "react-redux";
+import { userExist } from "../redux/reducer/auth";
+import toast from "react-hot-toast";
 const Login = () => {
+  const dispatch = useDispatch();
+
   const [isLogin, setIsLogin] = useState(true);
   const toggleLogin = () => setIsLogin((prev) => !prev);
 
@@ -24,10 +30,29 @@ const Login = () => {
   const password = useStrongPassword();
   const avatar = useFileHandler("single");
 
-  const handleLogin = (e) => {
+  const handleLogin = async(e) => {
     e.preventDefault();
-    console.log(username.value, password.value);
-  };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+try {
+  const { data } = await axios.post(
+    `${server}/api/v1/user/login`,
+    {
+      username: username.value,
+      password: password.value,
+    },
+    config
+  );
+  dispatch(userExist(data));
+  toast.success(data.message);
+} catch (error) {
+  toast.error(error.response.data.message);
+
+}
+    };
 
   const handleSignUp = (e) => {
     e.preventDefault();

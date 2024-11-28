@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import RotateLoader from "./components/layout/Loader";
 import axios from "axios";
+import { Toaster } from "react-hot-toast"
 import { server } from "./constants/config";
 
 const Home = lazy(() => import("./pages/Home"));
@@ -15,14 +16,14 @@ const UserManagement = lazy(() => import("./pages/admin/UserManagement"));
 const ChatManagement = lazy(() => import("./pages/admin/ChatManagement"));
 const MessageManagement = lazy(() => import("./pages/admin/MessageManagement"));
 import { useDispatch, useSelector } from "react-redux";
-import { userNotExist } from "./redux/reducer/auth";
+import { userExist, userNotExist } from "./redux/reducer/auth";
 const App = () => {
 
   const dispatch = useDispatch();
   const {user,loader}=useSelector(state=>state.auth)
 
 useEffect(() => {
-  axios.get(`${server}/api/v1/user/me`).then((res)=>console.log(res)).catch((err)=>dispatch(userNotExist()));
+  axios.get(`${server}/api/v1/user/me`).then((res)=>dispatch(userExist(res.data.user))).catch((err)=>dispatch(userNotExist()));
 },[])
  
   
@@ -51,6 +52,7 @@ useEffect(() => {
           
         </Routes>
       </Suspense>
+      <Toaster position="bottom-center" />
     </BrowserRouter>
   );
 };
