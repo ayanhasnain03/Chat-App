@@ -66,9 +66,9 @@ const Login = () => {
     formData.append("avatar", avatar.file);
 
     const config = {
+        withCredentials: true,
       headers: {
         "Content-Type": "multipart/form-data",
-        withCredentials: true
       },
     };
 
