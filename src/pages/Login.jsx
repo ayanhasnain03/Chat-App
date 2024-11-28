@@ -50,13 +50,38 @@ try {
   toast.success(data.message);
 } catch (error) {
   toast.error(error.response.data.message);
-
 }
     };
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async(e) => {
     e.preventDefault();
-    console.log(username.value, password.value);
+    
+    const formData = new FormData();
+
+    formData.append("name", name.value);
+    formData.append("bio",bio.value);
+    formData.append("username", username.value);
+    formData.append("password", password.value);
+    formData.append("avatar", avatar.file);
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        withCredentials: true
+      },
+    };
+
+    try {
+      const {data} = await axios.post(
+        `${server}/api/v1/user/new`,
+        formData,
+        config
+      )
+      dispatch(userExist(data));
+      toast.success(data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
 
   return (
