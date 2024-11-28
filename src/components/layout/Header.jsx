@@ -18,12 +18,17 @@ import { lazy, Suspense, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../assests/chat.png";
 import { cyan } from "../../constants/color";
-
+import { useDispatch } from "react-redux";
+import { userNotExist } from "../../redux/reducer/auth";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { server } from "../../constants/config";
 const Search = lazy(() => import("../specific/Search"));
 const Newgroup = lazy(() => import("../specific/Newgroup"));
 const Notifications = lazy(() => import("../specific/Notifications"));
 
 const Header = () => {
+  const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const [isGroup, setIsGroup] = useState(false);
@@ -45,8 +50,11 @@ const Header = () => {
     setIsNotifiction((prev) => !prev);
   };
 
-  const logOutHandler = () => {
-    console.log("log out");
+  const logOutHandler = async() => {
+
+const {data}= await axios.post(`${server}/api/v1/user/logout`);
+dispatch(userNotExist());
+console.log(data);
   };
 
   const naviagteToGroup = () => navigate("/groups");

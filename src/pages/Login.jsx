@@ -32,25 +32,26 @@ const Login = () => {
 
   const handleLogin = async(e) => {
     e.preventDefault();
-    const config = {
+     const config = {
+      withCredentials: true,
       headers: {
         "Content-Type": "application/json",
       },
+    };
+    try {
+      const { data } = await axios.post(
+        `${server}/api/v1/user/login`,
+        {
+          username: username.value,
+          password: password.value,
+        },
+        config
+      );
+      dispatch(userExist(data.user));
+      toast.success(data.message);
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
     }
-try {
-  const { data } = await axios.post(
-    `${server}/api/v1/user/login`,
-    {
-      username: username.value,
-      password: password.value,
-    },
-    config
-  );
-  dispatch(userExist(data));
-  toast.success(data.message);
-} catch (error) {
-  toast.error(error.response.data.message);
-}
     };
 
   const handleSignUp = async(e) => {
@@ -77,7 +78,6 @@ try {
         formData,
         config
       )
-      dispatch(userExist(data));
       toast.success(data.message);
     } catch (error) {
       toast.error(error.response.data.message);

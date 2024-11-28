@@ -22,9 +22,16 @@ const App = () => {
   const dispatch = useDispatch();
   const {user,loader}=useSelector(state=>state.auth)
 
-useEffect(() => {
-  axios.get(`${server}/api/v1/user/me`,{withCredentials:true}).then((res)=>dispatch(userExist(res.data.user))).catch((err)=>dispatch(userNotExist()));
-},[])
+
+  useEffect(() => {
+    axios
+      .get(`${server}/api/v1/user/me`, { withCredentials: true })
+      .then(({ data }) => dispatch(userExist(data.user)))
+      .catch((err) => dispatch(userNotExist()));
+      
+  }, [dispatch]);
+
+
  
   
   return loader?<h1>Loading...</h1>: (
