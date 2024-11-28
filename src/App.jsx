@@ -1,8 +1,9 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import RotateLoader from "./components/layout/Loader";
-
+import axios from "axios";
+import { server } from "./constants/config";
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
@@ -13,10 +14,19 @@ const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
 const UserManagement = lazy(() => import("./pages/admin/UserManagement"));
 const ChatManagement = lazy(() => import("./pages/admin/ChatManagement"));
 const MessageManagement = lazy(() => import("./pages/admin/MessageManagement"));
-
+import { useDispatch, useSelector } from "react-redux";
+import { userNotExist } from "./redux/reducer/auth";
 const App = () => {
-  let user = true;
-  return (
+
+  const dispatch = useDispatch();
+  const {user,loader}=useSelector(state=>state.auth)
+
+useEffect(() => {
+  axios.get(`${server}/api/v1/user/me`).then((res)=>console.log(res)).catch((err)=>dispatch(userNotExist()));
+},[])
+ 
+  
+  return loader?<h1>Loading...</h1>: (
     <BrowserRouter>
       <Suspense fallback={<RotateLoader />}>
         <Routes>
