@@ -52,7 +52,10 @@ const Header = () => {
 
   const logOutHandler = async() => {
 
-const {data}= await axios.post(`${server}/api/v1/user/logout`);
+const {data}= await axios.get(`${server}/api/v1/user/logout`,{
+  withCredentials: true
+});
+toast.success(data.message);
 dispatch(userNotExist());
 console.log(data);
   };
