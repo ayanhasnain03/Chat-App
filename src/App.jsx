@@ -23,7 +23,7 @@ const App = () => {
   const {user,loader}=useSelector(state=>state.auth)
 
 useEffect(() => {
-  axios.get(`${server}/api/v1/user/me`).then((res)=>dispatch(userExist(res.data.user))).catch((err)=>dispatch(userNotExist()));
+  axios.get(`${server}/api/v1/user/me`,{withCredentials:true}).then((res)=>dispatch(userExist(res.data.user))).catch((err)=>dispatch(userNotExist()));
 },[])
  
   
