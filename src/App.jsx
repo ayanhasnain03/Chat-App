@@ -28,13 +28,13 @@ const App = () => {
       .get(`${server}/api/v1/user/me`, { withCredentials: true })
       .then(({ data }) => dispatch(userExist(data.user)))
       .catch((err) => dispatch(userNotExist()));
-      
+
   }, [dispatch]);
 
 
- 
-  
-  return loader?<h1>Loading...</h1>: (
+
+
+  return loader?<RotateLoader/>: (
     <BrowserRouter>
       <Suspense fallback={<RotateLoader />}>
         <Routes>
@@ -56,7 +56,7 @@ const App = () => {
           <Route path="/admin/users" element={<UserManagement />} />
           <Route path="/admin/chats" element={<ChatManagement />} />
           <Route path="/admin/messages" element={<MessageManagement />} />
-          
+
         </Routes>
       </Suspense>
       <Toaster position="bottom-center" />

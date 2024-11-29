@@ -5,10 +5,17 @@ import Title from "../shared/Title";
 import ChatList from "../specific/ChatList";
 import Profile from "../specific/Profile";
 import Header from "./Header";
+import { useMyChatsQuery } from "../../redux/api/api";
+import RotateLoader from "./Loader";
 const AppLayout = () => (WrappedComponent) => {
   return (props) => {
     const params = useParams();
     const chatId = params.chatId;
+
+
+const {data,isLoading}=useMyChatsQuery("")
+
+
     const handleDeleteChat = (e, _id, groupChat) => {
       e.preventDefault();
       console.log(
@@ -31,18 +38,17 @@ const AppLayout = () => (WrappedComponent) => {
             sx={{ display: { xs: "none", sm: "block" }, bgcolor: "#fff" }}
             height={"100%"}
           >
+         {
+          isLoading ? (
+           <RotateLoader/>
+          ) : (
             <ChatList
-              chats={chats}
-              chatId={chatId}
-              // newMessagesAlert={[
-              //   {
-              //     chatId,
-              //     count: 4,
-              //   },
-              // ]}
-              onlineUsers={["1", "2"]}
+              chats={data?.chats}
               handleDeleteChat={handleDeleteChat}
+              chatId={chatId}
             />
+          )
+         }
           </Grid>
 
           <Grid item xs={12} sm={8} md={5} lg={6} height={"100%"}>

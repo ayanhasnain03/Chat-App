@@ -14,7 +14,7 @@ const ChatItem = ({
   index = 0,
   handleDeleteChat,
 }) => {
-  console.log(_id, groupChat);
+
   return (
     <Link
       sx={{

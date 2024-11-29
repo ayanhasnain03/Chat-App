@@ -4,7 +4,7 @@ import { transformImage } from "../../lib/features";
 
 // Todo Transform
 const AvatarCard = ({ avatar = [], max = 4 }) => {
-  console.log(avatar);
+
   return (
     <Stack direction={"row"} spacing={0.5}>
       <AvatarGroup
