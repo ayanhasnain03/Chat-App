@@ -15,6 +15,8 @@ import { useState } from "react";
 import { sampleUsers } from "../../constants/sampleData";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsSearch } from "../../redux/reducer/misc";
+import { useSearchUserQuery } from "../../redux/api/api";
+import { useErrors } from "../../hooks/hook";
 
 const Search = () => {
   const dispatch = useDispatch();
@@ -22,6 +24,8 @@ const Search = () => {
   const [users, setUsers] = useState(sampleUsers);
   const { isSearch } = useSelector((state) => state.misc);
   const isLoadingSendFriendRequest = false;
+  const {data, isLoading, isError, error} = useSearchUserQuery(search.value);
+  useErrors([{isError, error}])
 
   const addFriendHandler = (id) => {
     console.log(`Friend request sent to user with ID: ${id}`);
@@ -63,9 +67,9 @@ const Search = () => {
         />
 
         {/* User List */}
-        {users.length > 0 ? (
+        {data?.users?.length > 0 ? (
           <List>
-            {users.map((user) => (
+            {data?.users?.map((user) => (
               <UserItem
                 user={user}
                 key={user._id}
