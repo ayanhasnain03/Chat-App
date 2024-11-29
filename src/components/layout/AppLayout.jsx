@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Drawer, Grid, IconButton } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { chats } from "../../constants/sampleData";
 import Title from "../shared/Title";
@@ -7,13 +7,21 @@ import Profile from "../specific/Profile";
 import Header from "./Header";
 import { useMyChatsQuery } from "../../redux/api/api";
 import RotateLoader from "./Loader";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsMobile } from "../../redux/reducer/misc";
+import { Close } from "@mui/icons-material";
 const AppLayout = () => (WrappedComponent) => {
   return (props) => {
     const params = useParams();
     const chatId = params.chatId;
 
+const dispatch = useDispatch();
+const {isMobile}=useSelector(state=>state.misc)
 
-const {data,isLoading}=useMyChatsQuery("")
+const handleMobileClose = () => dispatch(setIsMobile(false));
+
+
+const {data,isLoading,isError,error,refetch}=useMyChatsQuery("")
 
 
     const handleDeleteChat = (e, _id, groupChat) => {
@@ -26,10 +34,37 @@ const {data,isLoading}=useMyChatsQuery("")
       );
       // Add additional logic for deleting the chat if necessary
     };
+
+
+
     return (
       <>
         <Title />
         <Header />
+
+
+
+{
+  isLoading ? (
+    <RotateLoader/>
+  ):(
+<Drawer open={isMobile} onClose={handleMobileClose}>
+  <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
+    <IconButton onClick={handleMobileClose}>
+<Close/>
+    </IconButton>
+  </div>
+  <ChatList
+    w="70vw"
+    chats={data?.chats}
+    handleDeleteChat={handleDeleteChat}
+    chatId={chatId}
+  />
+</Drawer>
+  )
+}
+
+
         <Grid container height={"calc(100vh - 4rem)"}>
           <Grid
             item
