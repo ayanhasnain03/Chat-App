@@ -1,6 +1,6 @@
 import { Drawer, Grid, IconButton } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { chats } from "../../constants/sampleData";
+
 import Title from "../shared/Title";
 import ChatList from "../specific/ChatList";
 import Profile from "../specific/Profile";
@@ -10,19 +10,16 @@ import RotateLoader from "./Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsMobile } from "../../redux/reducer/misc";
 import { Close } from "@mui/icons-material";
+import { useErrors } from "../../hooks/hook";
 const AppLayout = () => (WrappedComponent) => {
   return (props) => {
     const params = useParams();
     const chatId = params.chatId;
-
 const dispatch = useDispatch();
 const {isMobile}=useSelector(state=>state.misc)
-
 const handleMobileClose = () => dispatch(setIsMobile(false));
-
-
-const {data,isLoading,isError,error,refetch}=useMyChatsQuery("")
-
+const {data,isLoading,isError,error}=useMyChatsQuery("")
+useErrors([{isError,error}])
 
     const handleDeleteChat = (e, _id, groupChat) => {
       e.preventDefault();
@@ -32,10 +29,7 @@ const {data,isLoading,isError,error,refetch}=useMyChatsQuery("")
         "Group Chat:",
         groupChat
       );
-      // Add additional logic for deleting the chat if necessary
     };
-
-
 
     return (
       <>
