@@ -18,12 +18,12 @@ import { lazy, Suspense, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../assests/chat.png";
 import { cyan } from "../../constants/color";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userNotExist } from "../../redux/reducer/auth";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { server } from "../../constants/config";
-import { setIsMobile } from "../../redux/reducer/misc";
+import { setIsMobile, setIsSearch } from "../../redux/reducer/misc";
 const Search = lazy(() => import("../specific/Search"));
 const Newgroup = lazy(() => import("../specific/Newgroup"));
 const Notifications = lazy(() => import("../specific/Notifications"));
@@ -31,7 +31,7 @@ const Notifications = lazy(() => import("../specific/Notifications"));
 const Header = () => {
   const dispatch = useDispatch();
 
-  const [isSearch, setIsSearch] = useState(false);
+const {isSearch}=useSelector(state=>state.misc)
   const [isGroup, setIsGroup] = useState(false);
   const [isNotifiction, setIsNotifiction] = useState(false);
 
@@ -40,9 +40,8 @@ const Header = () => {
 dispatch(setIsMobile(true));
   };
 
-  const openSearchDialog = () => {
-    setIsSearch((prev) => !prev);
-  };
+  const openSearchDialog = () => dispatch(setIsSearch(true));
+
 
   const openNewGroup = () => {
     setIsGroup((prev) => !prev);
