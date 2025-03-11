@@ -18,10 +18,18 @@ const api = createApi({
     searchUser: builder.query({
       query: (name) => `user/search?name=${name}`,
       method: "GET",
-      providesTags: ["User"], // Added caching support
+      providesTags: ["User"],
     }),
+    sendFriendRequest:builder.mutation({
+      query:(data)=>({
+        url:"/user/sendrequest",
+        method:"PUT",
+        body:data
+      }),
+      invalidatesTags:["User"]
+    })
   }),
 });
 
 export default api;
-export const { useMyChatsQuery, useSearchUserQuery } = api;
+export const { useMyChatsQuery, useSearchUserQuery ,useSendFriendRequestMutation} = api;

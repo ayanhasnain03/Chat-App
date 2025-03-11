@@ -9,28 +9,50 @@ import {
   Stack,
   TextField,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import UserItem from "../shared/UserItem";
-import { useState } from "react";
-import { sampleUsers } from "../../constants/sampleData";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsSearch } from "../../redux/reducer/misc";
-import { useSearchUserQuery } from "../../redux/api/api";
-import { useErrors } from "../../hooks/hook";
+import {
+  useSearchUserQuery,
+  useSendFriendRequestMutation,
+} from "../../redux/api/api";
+import { useAsyncMutation, useErrors } from "../../hooks/hook";
+import toast from "react-hot-toast";
 
 const Search = () => {
   const dispatch = useDispatch();
   const search = useInputValidation("");
-  const [users, setUsers] = useState(sampleUsers);
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const { isSearch } = useSelector((state) => state.misc);
-  const isLoadingSendFriendRequest = false;
-  const {data, isLoading, isError, error} = useSearchUserQuery(search.value);
+
+  const [sendFriendReq,isLoadingSendFriendRequest] = useAsyncMutation(useSendFriendRequestMutation);
 
 
-  useErrors([{isError, error}])
 
-  const addFriendHandler = (id) => {
-    console.log(`Friend request sent to user with ID: ${id}`);
+  // Debouncing: Wait for 500ms before setting the search term
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search.value);
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [search.value]);
+
+  // Fetch users (If search is empty, get all users)
+  const { data, isLoading, isError, error } = useSearchUserQuery(
+    debouncedSearch,
+    {
+      skip: !isSearch, // Fetch only when dialog is open
+    }
+  );
+
+  useErrors([{ isError, error }]);
+
+  const addFriendHandler = async(id) => {
+await sendFriendReq("Sending Friend request...",{userId:id})
   };
 
   const handleClose = () => {
@@ -68,15 +90,18 @@ const Search = () => {
           }}
         />
 
-        {/* User List */}
-        {data?.users?.length > 0 ? (
+        {/* Loading Indicator */}
+        {isLoading ? (
+          <Stack alignItems="center" py={2}>
+            <CircularProgress size={24} />
+          </Stack>
+        ) : data?.users?.length > 0 ? (
           <List>
-            {data?.users?.map((user) => (
+            {data.users.map((user) => (
               <UserItem
                 user={user}
                 key={user._id}
                 handler={addFriendHandler}
-                isAdded
                 handlerIsLoading={isLoadingSendFriendRequest}
               />
             ))}
