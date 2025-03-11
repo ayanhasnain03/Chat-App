@@ -25,6 +25,8 @@ const Search = () => {
   const { isSearch } = useSelector((state) => state.misc);
   const isLoadingSendFriendRequest = false;
   const {data, isLoading, isError, error} = useSearchUserQuery(search.value);
+
+
   useErrors([{isError, error}])
 
   const addFriendHandler = (id) => {
